@@ -19,7 +19,7 @@ jobs:
         uses: dependency-check/Dependency-Check_Action@main
         id: Depcheck
         with:
-          distribution: 'cli'
+          distribution: 'alpine'
           project: 'test'
           path: '.'
           format: 'HTML'
