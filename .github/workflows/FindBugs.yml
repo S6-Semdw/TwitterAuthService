@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  pull_request:
 
 jobs:
   findbugs:
@@ -11,19 +12,27 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Java
-        uses: actions/setup-java@v1
+      - name: Set up JDK 19
+        uses: actions/setup-java@v2
         with:
           java-version: 19
-      - name: Run FindBugs
-        uses: jvzoggel/findbugs-action@v1
+      - name: Download and extract FindBugs 
+        run: |
+          curl -L https://sourceforge.net/projects/findbugs/files/findbugs/2.0.3/findbugs-2.0.3.tar.gz/download -o findbugs-2.0.3.tar.gz
+          tar -xzf findbugs-2.0.3.tar.gz
+      - name: Run FindBugs 
+        run: |
+          ./findbugs-2.0.3/bin/findbugs \
+            -textui \
+            -effort:max \
+            -xml \
+            -output findbugs-report.xml \
+            -exclude exclude.xml \
+            -projectName "My Java Project" \
+            -exitcode \
+            ./src
+      - name: Upload FindBugs report
+        uses: actions/upload-artifact@v2
         with:
-          source-path: src/main/java
-          include-filter: "**/*.java"
-          exclude-filter: ""
-          low-priority: false
-          medium-priority: true
-          high-priority: true
-          xml-output: true
-          html-output: true
-          output-directory: "findbugs-reports"
+          name: findbugs-report
+          path: findbugs-report.xml
