@@ -3,8 +3,7 @@ name: FindBugs
 on:
   push:
     branches:
-      - main
-  pull_request:
+      - master
 
 jobs:
   findbugs:
