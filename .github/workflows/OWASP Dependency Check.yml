@@ -9,20 +9,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set up JDK 19
+        uses: actions/setup-java@v2
+        with:
+          java-version: 19
       - name: Build project with Maven
         run: mvn clean install
       - name: Depcheck
-        uses: dependency-check/Dependency-Check_Action@main
+        uses: dependency-check/Dependency-Check_Action@v2.2.2
         id: Depcheck
         with:
           project: 'test'
           path: '.'
           format: 'HTML'
-          out: 'reports' # this is the default, no need to specify unless you wish to override it
+          out: 'reports'
           args: >
             --failOnCVSS 7
             --enableRetired
-          distribution: 'v6' # specify the version of the tool to use
+            --distribution 'OWASP'
       - name: Upload Test results
         uses: actions/upload-artifact@master
         with:
