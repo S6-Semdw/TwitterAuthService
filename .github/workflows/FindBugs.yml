@@ -1,38 +1,24 @@
-name: FindBugs
+name: Java CI
 
-on:
-  push:
-    branches:
-      - master
-  pull_request:
+on: [push]
 
 jobs:
-  findbugs:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 19
-        uses: actions/setup-java@v2
-        with:
-          java-version: 19
-      - name: Download and extract FindBugs 
-        run: |
-          curl -L https://sourceforge.net/projects/findbugs/files/findbugs/2.0.3/findbugs-2.0.3.tar.gz/download -o findbugs-2.0.3.tar.gz
-          tar -xzf findbugs-2.0.3.tar.gz
-      - name: Run FindBugs 
-        run: |
-          ./findbugs-2.0.3/bin/findbugs \
-            -textui \
-            -effort:max \
-            -xml \
-            -output findbugs-report.xml \
-            -exclude exclude.xml \
-            -projectName "My Java Project" \
-            -exitcode \
-            ./src
-      - name: Upload FindBugs report
-        uses: actions/upload-artifact@v2
-        with:
-          name: findbugs-report
-          path: findbugs-report.xml
+    - uses: actions/checkout@v2
+    - name: Set up JDK 19
+      uses: actions/setup-java@v1
+      with:
+        java-version: 19
+    - uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - name: Build with Maven
+      run: mvn -B verify spotbugs:spotbugs
+    - uses: jwgmeligmeyling/spotbugs-github-action@master
+      with:
+        path: '**/spotbugsXml.xml'
