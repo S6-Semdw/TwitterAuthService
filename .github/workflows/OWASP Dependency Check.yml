@@ -1,0 +1,21 @@
+name: OWASP Dependency Check
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Build with Maven
+      run: mvn clean install -DskipTests=true
+    - name: Run OWASP Dependency Check
+      uses: owasp/dependency-check-action@v2
+      with:
+        format: 'HTML'
+        fail-build: 'true'
