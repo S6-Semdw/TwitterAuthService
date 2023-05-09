@@ -26,6 +26,7 @@ jobs:
           args: >
             --failOnCVSS 7
             --enableRetired
+          distribution: 'ALPINE'
       - name: Upload Test results
         uses: actions/upload-artifact@master
         with:
