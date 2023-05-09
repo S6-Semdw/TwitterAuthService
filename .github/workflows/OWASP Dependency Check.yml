@@ -26,7 +26,7 @@ jobs:
           args: >
             --failOnCVSS 7
             --enableRetired
-            --distribution 'OWASP'
+          distribution: '2021.11'
       - name: Upload Test results
         uses: actions/upload-artifact@master
         with:
