@@ -15,7 +15,7 @@ jobs:
     - name: Build with Maven
       run: mvn clean install -DskipTests=true
     - name: Run OWASP Dependency Check
-      uses: https://github.com/owasp/dependency-check-action@v2
+      uses: owasp/dependency-check-action@v1
 
       with:
         format: 'HTML'
