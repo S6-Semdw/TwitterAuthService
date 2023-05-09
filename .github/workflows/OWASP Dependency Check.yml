@@ -9,10 +9,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Java 19
-        uses: actions/setup-java@v2
-        with:
-          java-version: '19'
       - name: Build project with Maven
         run: mvn clean install
       - name: Depcheck
@@ -26,7 +22,7 @@ jobs:
           args: >
             --failOnCVSS 7
             --enableRetired
-          distribution: 'ALPINE'
+          distribution: 'v6' # specify the version of the tool to use
       - name: Upload Test results
         uses: actions/upload-artifact@master
         with:
