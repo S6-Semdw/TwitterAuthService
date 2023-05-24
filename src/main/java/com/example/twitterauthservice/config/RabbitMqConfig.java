@@ -33,14 +33,20 @@ public class RabbitMqConfig {
                 new Queue("q.userUpdate" ),
                 new Queue("q.saveUser" ),
                 new Queue("q.registerUser" ),
-                new Queue("q.userDelete" ),
                 new Queue("q.token" ),
                 new Binding("q.userRegister", Binding.DestinationType.QUEUE, "x.user-service", "userRegister", null),
                 new Binding("q.userUpdate", Binding.DestinationType.QUEUE, "x.user-service", "userUpdate", null),
                 new Binding("q.saveUser", Binding.DestinationType.QUEUE, "x.user-service", "saveUser", null),
                 new Binding("q.registerUser", Binding.DestinationType.QUEUE, "x.user-service", "registerUser", null),
-                new Binding("q.userDelete", Binding.DestinationType.QUEUE, "x.user-service", "userDelete", null),
                 new Binding("q.token", Binding.DestinationType.QUEUE, "x.user-service", "token", null));
+    }
+
+    @Bean
+    public Declarables deleteUser(){
+        return new Declarables(
+                new FanoutExchange("x.delete.user-service"),
+                new Queue("userDelete" ),
+                new Binding("userDelete", Binding.DestinationType.QUEUE, "x.delete.user-service", "userDelete", null));
     }
 }
 
