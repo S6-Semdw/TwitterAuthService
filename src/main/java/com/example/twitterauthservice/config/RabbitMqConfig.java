@@ -33,12 +33,18 @@ public class RabbitMqConfig {
                 new Queue("q.userUpdate" ),
                 new Queue("q.saveUser" ),
                 new Queue("q.registerUser" ),
-                new Queue("q.token" ),
                 new Binding("q.userRegister", Binding.DestinationType.QUEUE, "x.user-service", "userRegister", null),
                 new Binding("q.userUpdate", Binding.DestinationType.QUEUE, "x.user-service", "userUpdate", null),
                 new Binding("q.saveUser", Binding.DestinationType.QUEUE, "x.user-service", "saveUser", null),
-                new Binding("q.registerUser", Binding.DestinationType.QUEUE, "x.user-service", "registerUser", null),
-                new Binding("q.token", Binding.DestinationType.QUEUE, "x.user-service", "token", null));
+                new Binding("q.registerUser", Binding.DestinationType.QUEUE, "x.user-service", "registerUser", null));
+    }
+
+    @Bean
+    public Declarables token(){
+        return new Declarables(
+                new FanoutExchange("x.user-token"),
+                new Queue("token" ),
+                new Binding("token", Binding.DestinationType.QUEUE, "x.user-token", "token", null));
     }
 
     @Bean
@@ -47,6 +53,30 @@ public class RabbitMqConfig {
                 new FanoutExchange("x.delete.user-service"),
                 new Queue("userDelete" ),
                 new Binding("userDelete", Binding.DestinationType.QUEUE, "x.delete.user-service", "userDelete", null));
+    }
+
+    @Bean
+    public Declarables delete(){
+        return new Declarables(
+                new FanoutExchange("x.user-delete"),
+                new Queue("deleteUser" ),
+                new Binding("deleteUser", Binding.DestinationType.QUEUE, "x.user-delete", "deleteUser", null));
+    }
+
+    @Bean
+    public Declarables getUser(){
+        return new Declarables(
+                new FanoutExchange("x.get-user"),
+                new Queue("getUser" ),
+                new Binding("getUser", Binding.DestinationType.QUEUE, "x.get-user", "getUser", null));
+    }
+
+    @Bean
+    public Declarables sendUser(){
+        return new Declarables(
+                new FanoutExchange("x.send-user"),
+                new Queue("sendUser" ),
+                new Binding("sendUser", Binding.DestinationType.QUEUE, "x.send-user", "sendUser", null));
     }
 }
 
